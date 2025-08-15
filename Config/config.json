@@ -1,0 +1,80 @@
+{
+    "access_token": "myaccesstoken",
+    "access_token_timestamp": "2025-05-03T19:38:01",
+    "api_key": "myapikey",
+    "api_secret": "myapisecret",
+    "holidays": [
+        {
+            "date": "2025-01-26",
+            "title": "Republic Day"
+        },
+        {
+            "date": "2025-02-26",
+            "title": "Maha Shivaratri"
+        },
+        {
+            "date": "2025-03-14",
+            "title": "Holi"
+        },
+        {
+            "date": "2025-03-31",
+            "title": "Eid-Ul-Fitr (Ramzan Eid)"
+        },
+        {
+            "date": "2025-04-06",
+            "title": "Ram Navami"
+        },
+        {
+            "date": "2025-04-10",
+            "title": "Mahavir Jayanti"
+        },
+        {
+            "date": "2025-04-14",
+            "title": "Dr. Baba Saheb Ambedkar Jayanti"
+        },
+        {
+            "date": "2025-04-18",
+            "title": "Good Friday"
+        },
+        {
+            "date": "2025-06-07",
+            "title": "Bakri Eid"
+        },
+        {
+            "date": "2025-07-06",
+            "title": "Moharram"
+        },
+        {
+            "date": "2025-08-15",
+            "title": "Independence Day"
+        },
+        {
+            "date": "2025-08-27",
+            "title": "Ganesh Chaturthi"
+        },
+        {
+            "date": "2025-10-02",
+            "title": "Mahatma Gandhi Jayanti"
+        },
+        {
+            "date": "2025-10-21",
+            "title": "Diwali-Laxmi Pujan (Muhurat trading session)"
+        },
+        {
+            "date": "2025-10-22",
+            "title": "Diwali-Balipratipada"
+        },
+        {
+            "date": "2025-11-05",
+            "title": "Gurunanak Jayanti"
+        },
+        {
+            "date": "2025-12-25",
+            "title": "Christmas"
+        }
+    ],
+    "risk_parameters": {
+    },
+    "strategies": {
+    }
+}

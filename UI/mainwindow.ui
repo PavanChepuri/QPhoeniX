@@ -11,7 +11,8 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QphoeniX Trading</string> </property>
+   <string>QphoeniX Trading</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -32,31 +33,37 @@ background-color: rgb(170, 170, 127);</string>
        <widget class="QLabel" name="statusLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>1</horstretch> <verstretch>0</verstretch>
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="styleSheet">
          <string notr="true">font: 700 9pt &quot;Segoe UI&quot;;
-color: rgb(85, 0, 127);</string>
+color: rgb(112, 21, 127);</string>
         </property>
         <property name="text">
-         <string>User: N/A</string> </property>
+         <string>User: N/A</string>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="fundsLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>1</horstretch> <verstretch>0</verstretch>
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="styleSheet">
          <string notr="true">font: 700 9pt &quot;Segoe UI&quot;;
-color: rgb(0, 85, 0);</string> </property>
+color: rgb(21, 112,21);</string>
+        </property>
         <property name="text">
-         <string>Funds: N/A</string> </property>
+         <string>Funds: N/A</string>
+        </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set> </property>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
        </widget>
       </item>
      </layout>
@@ -74,8 +81,10 @@ color: rgb(0, 85, 0);</string> </property>
     <item>
      <widget class="QChartView" name="chartView" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding"> <horstretch>0</horstretch>
-        <verstretch>3</verstretch> </sizepolicy>
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>3</verstretch>
+       </sizepolicy>
       </property>
      </widget>
     </item>
@@ -97,7 +106,9 @@ color: rgb(0, 85, 0);</string> </property>
   <customwidget>
    <class>QChartView</class>
    <extends>QWidget</extends>
-   <header location="global">QtCharts/QChartView</header> <container>1</container> </customwidget>
+   <header location="global">QtCharts/QChartView</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

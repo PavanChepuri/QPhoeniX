@@ -1,4 +1,3 @@
-// datamanager.h
 #ifndef DATAMANAGER_H
 #define DATAMANAGER_H
 
@@ -11,81 +10,97 @@
 #include <QDateTime>
 #include <QJsonArray>
 
-// *** MODIFIED: Include data structures from separate files ***
-#include "Data/DataStructures/instrumentdata.h"       // Assuming path is correct
-#include "Data/DataStructures/candle.h"               // <-- Include (was candle.h)
-#include "Data/DataStructures/instrumentanalytics.h"  // <-- Include new header
-// --- End Modification ---
+// Project data structures
+#include "Data/DataStructures/instrumentdata.h"
+#include "Data/DataStructures/candle.h"
+#include "Data/DataStructures/instrumentanalytics.h"
 
-#include "Utils/marketcalendar.h"                     // Assuming path is correct
-
+// Market calendar (for prev trading day etc.)
+#include "Utils/marketcalendar.h"
 
 class DataManager : public QObject
 {
     Q_OBJECT
 
 public:
-    // Singleton Access
+    // Singleton
     static DataManager* instance();
 
-    // Public Data Accessors
+    // Basic accessors
     InstrumentData getInstrument(const QString &instrumentToken) const;
     QHash<QString, InstrumentData> getAllInstruments() const;
-    // Uses CandleData from included header
     QVector<CandleData> getStoredHistoricalData(const QString &instrumentToken, const QString &interval) const;
-    // Uses InstrumentAnalytics from included header
     InstrumentAnalytics getInstrumentAnalytics(const QString &instrumentToken) const;
 
+    // --- Option expiry helpers (read-only utilities) ---
+    // Pick the earliest expiry >= fromDate (i.e., "weekly" by convention).
+    QDate nearestWeeklyExpiry(const QString& underlying,
+                              const QDate& fromDate = QDate::currentDate()) const;
+
+    // Pick the last expiry within the same month as fromDate (monthly). If none in that month,
+    // pick the latest available overall (future-proof).
+    QDate monthlyExpiryInSameMonth(const QString& underlying,
+                                   const QDate& fromDate = QDate::currentDate()) const;
+
+    // All options (CE/PE) for a specific underlying & expiry.
+    QVector<InstrumentData> optionsForUnderlyingAndExpiry(const QString& underlying,
+                                                          const QDate& expiry) const;
+
+    // Returns the instrumentToken (QString) of the current-month future for the given underlying
+    // ("NIFTY" or "BANKNIFTY"). Returns empty QString if not found.
+    QString currentMonthFutureToken(const QString& underlying) const;
 
 signals:
-    void instrumentDataUpdated(const QString &instrumentToken); // Data for token (any interval) changed
-    void allInstrumentsDataUpdated(); // Instrument list loaded/parsed
-    void fetchHistoricalDataRequested(const QString &instrumentToken, const QString &interval, const QString &fromDate, const QString &toDate);
+    void instrumentDataUpdated(const QString &instrumentToken);
+    void allInstrumentsDataUpdated();
+    void fetchHistoricalDataRequested(const QString &instrumentToken,
+                                      const QString &interval,
+                                      const QString &fromDate,
+                                      const QString &toDate);
     void errorOccurred(const QString& context, const QString& message);
 
-
 public slots:
-    // Data Loading Slots
+    // Input slots
     void onInstrumentsFetched(const QString &filePath);
-    void onHistoricalDataReceived(const QString &instrumentToken, const QString &interval, const QJsonArray &candles);
+    void onHistoricalDataReceived(const QString &instrumentToken,
+                                  const QString &interval,
+                                  const QJsonArray &candles);
 
-    // Action Slots
+    // Actions
     void loadInstrumentsFromFile(const QString &filename);
     void requestHistoricalData(const QString &instrumentToken, const QString &interval);
 
-
 private:
-    // Private Constructor/Destructor
     explicit DataManager(QObject *parent = nullptr);
     ~DataManager();
 
-    // --- Private Member Variables ---
+    // --- State ---
     static DataManager* m_instance;
-    QHash<QString, InstrumentData> m_instruments;
-    // Uses CandleData from included header
-    QMap<QString, QMap<QString, QVector<CandleData>>> m_historicalDataMap;
-    // Uses InstrumentAnalytics from included header
-    QMap<QString, InstrumentAnalytics> m_instrumentAnalyticsMap;
+    QHash<QString, InstrumentData> m_instruments; // includes indices + filtered NFO
+    QMap<QString, QMap<QString, QVector<CandleData>>> m_historicalDataMap; // token -> interval -> candles
+    QMap<QString, InstrumentAnalytics> m_instrumentAnalyticsMap;            // token -> analytics
 
-
-    // --- Private Helper Methods ---
-    // Instrument Loading
+    // --- Helpers: file parse / persist ---
     InstrumentData parseInstrumentCSVLine(const QString &line);
     void saveParsedInstrumentsToFile();
-    // Historical Data Storage (Uses CandleData)
-    void storeHistoricalData(const QString &instrumentToken, const QString &interval, const QVector<CandleData> &data);
 
-    // Analytics Calculations (Uses CandleData and InstrumentAnalytics)
-    void calculateDailyAnalytics(const QString &instrumentToken); // Calculates Vol, Bands(PC), Swings, EMA(Daily)
-    void calculate5MinAnalytics(const QString &instrumentToken);  // Calculates EMA(5Min)
+    // --- Storage & analytics ---
+    void storeHistoricalData(const QString &instrumentToken,
+                             const QString &interval,
+                             const QVector<CandleData> &data);
+
+    void calculateDailyAnalytics(const QString &instrumentToken);
+    void calculate5MinAnalytics(const QString &instrumentToken);
     void calculatePreviousDayVWAPStats(const QString &instrumentToken);
+
+    // --- Math helpers ---
     double calculateEMA(const QVector<double>& prices, int period) const;
-    void calculateSwingHighLow(const QVector<CandleData>& dailyCandles, int period, double& outHigh, double& outLow) const;
-    double calculateMean(const QVector<double>& values) const;   // Declaration reinstated
-    double calculateStdDev(const QVector<double>& values) const;  // Declaration reinstated
+    void   calculateSwingHighLow(const QVector<CandleData>& dailyCandles,
+                               int period, double& outHigh, double& outLow) const;
+    double calculateMean(const QVector<double>& values) const;
+    double calculateStdDev(const QVector<double>& values) const;
 
-
-    // Prevent copying
+    // no copy/move
     DataManager(const DataManager&) = delete;
     DataManager& operator=(const DataManager&) = delete;
     DataManager(DataManager&&) = delete;

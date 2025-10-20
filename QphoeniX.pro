@@ -34,6 +34,7 @@ SOURCES += \
     Utils/configurationmanager.cpp \
     Utils/logger.cpp \
     Utils/marketcalendar.cpp \
+    Utils/ta_simple.cpp \
     main.cpp
 
 HEADERS += \
@@ -68,7 +69,8 @@ HEADERS += \
     UI/watchlistwidget.h \
     Utils/configurationmanager.h \
     Utils/logger.h \
-    Utils/marketcalendar.h
+    Utils/marketcalendar.h \
+    Utils/ta_simple.h
 
 RESOURCES += \
     resources.qrc
